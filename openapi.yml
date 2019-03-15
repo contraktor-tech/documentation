@@ -2,9 +2,96 @@ openapi: 3.0.0
 info:
   version: 1.0.0
   title: '{{ t "info.title" }}'
-  description: '{{ t "info.description" }}'
-  license:
-    name: UNLICENSED
+  description: |
+    Utilizando a Contraktor API v1, é possível automatizar a criação
+    de seus contratos e envio para assinatura.
+
+    Em [github.com/Contraktor-Legal-Tech/contraktor-api](https://github.com/Contraktor-Legal-Tech/contraktor-api/tree/master/examples),
+    você pode encontrar exemplos em Node.js de como utilizar a API.
+
+    ## Quick start
+
+    Antes de mais nada, é preciso obter uma chave de API (Api Key) para
+    realizar as chamadas. Contate nosso suporte técnico pela plataforma
+    para saber mais informações sobre o processo de geração de chaves.
+
+    Com a chave de acesso em mãoes, já podemos realizar o upload de um
+    arquivo PDF. O endpoint de Files cuidará dessa parte. Ao enviar um arquivo
+    nesse endpoint, será retornado um objeto do tipo File com seu identificador
+    único (File ID).
+
+
+    ```
+      POST /files
+      <multipart/form-data file=[arquivo]>
+    ```
+
+
+    Agora, podemos criar um contrato de fato, utilizando o arquivo que acabamos de subir
+    como documento principal. Basta fazer uma requisição no endpoint de Contracts.
+
+    ```
+      POST /contracts
+      {
+        "contract": {
+          "title": "Título do contrato",
+          "document": {
+            "file_id": <File ID>
+          }
+        }
+      }
+    ```
+
+    Agora vamos criar uma parte do tipo pessoa física para adicionar ao contrato.
+
+    ```
+      POST /parties
+      {
+        "party": {
+          "person_type": "pf",
+          "name": "Nome completo Pessoa física",
+          "email": "name@example.com"
+        }
+      }
+    ```
+
+    E outra parte do tipo pessoa jurídica.
+
+    ```
+      POST /parties
+      {
+        "party": {
+          "person_type": "pj",
+          "name": "Razão social"
+        }
+      }
+    ```
+
+    Vamos associar estas partes ao contrato, indicando que a
+    pessoa física é representante legal da pessoa jurídica.
+
+    ```
+      POST /contracts/<Contract ID>/shares
+      {
+        "sharing": {
+          "qualification": "Contratante",
+          "party_id": <Party ID da pessoa física>,
+          "company_id": <Party ID da pessoa jurídica>
+        }
+      }
+    ```
+
+    Agora basta enviar o contrato para assinatura, criando uma prova (Proof).
+
+    ```
+      POST /proofs
+      {
+        "proof": {
+          "contract_id": <Contract ID>,
+          "engine": "test"
+        }
+      }
+    ```
 
 servers:
   - url: /api
