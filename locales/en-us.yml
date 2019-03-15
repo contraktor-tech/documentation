@@ -1,0 +1,26 @@
+info.title: Contraktor API
+info.description: This is the documentation for Contraktor API
+
+servers.sandbox.description: Sandbox server (uses test data)
+servers.production.description: Production server
+
+tags.files.description: Everything about your files
+tags.contracts.description: Everything about your contracts
+tags.parties.description: Everything about your parties
+tags.proofs.description: Everything about your proofs (signatures)
+
+operations.createFile.summary: Create a file by uploading its content
+operations.createFile.responses.200.description: The created file
+operations.getFileById.summary: Retrieve a file by ID
+operations.getFileById.parameter.fileId.description: The ID of the file to retrieve
+operations.getFileById.responses.200.description: The file
+# operations.createContract.summary: 
+# operations.createContract.responses.200.description: 
+# operations.getContractById.summary: 
+# operations.getContractById.parameter.contractId.description: 
+# operations.getContractById.responses.200.description: 
+
+components.response.Unauthorized.description: Authentication required for accessing the specified resource
+components.response.Forbidden.description: Not enough permissions to access the specified resource
+components.response.NotFound.description: The specified resource was not found
+components.response.GenericError.description: Something went wrong

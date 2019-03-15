@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Swagger UI</title>
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@3/swagger-ui.css">
+</head>
+<body>
+  <main id="main"></main>
+
+  <script src="https://unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+  <script>
+    var ui = SwaggerUIBundle({
+      url: 'openapi.yml',
+      dom_id: '#main'
+    });
+  </script>
+</body>
+</html>

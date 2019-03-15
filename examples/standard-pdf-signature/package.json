@@ -1,0 +1,14 @@
+{
+  "name": "contraktor-standard-pdf-signature",
+  "version": "1.0.0",
+  "license": "WTFPL",
+  "repository": "git@github.com:Contraktor-Legal-Tech/contraktor-api.git",
+  "main": "index.js",
+  "engines": {
+    "node": ">=8.2.0"
+  },
+  "dependencies": {
+    "form-data": "^2.3.3",
+    "node-fetch": "^2.3.0"
+  }
+}

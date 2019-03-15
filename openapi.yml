@@ -1,0 +1,1140 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: '{{ t "info.title" }}'
+  description: '{{ t "info.description" }}'
+  license:
+    name: UNLICENSED
+
+servers:
+  - url: /api
+    description: '{{ t "servers.local.description" }}'
+  - url: https://api-qa.contraktor.com.br/api
+    description: '{{ t "servers.qa.description" }}'
+  - url: https://api.contraktor.com.br/api/v1
+    description: '{{ t "servers.production.description" }}'
+
+security:
+  - apiKey: []
+
+tags:
+  - name: File
+    description: '{{ t "tags.File.description" }}'
+  - name: Contract
+    description: '{{ t "tags.Contract.description" }}'
+  - name: Party
+    description: '{{ t "tags.Party.description" }}'
+  - name: Proof
+    description: '{{ t "tags.Proof.description" }}'
+
+paths:
+  '/files':
+    post:
+      operationId: createFile
+      summary: '{{ t "operations.createFile.summary" }}'
+      tags:
+        - File
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: '{{ t "operations.createFile.responses.200.description" }}'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/File'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/GenericError'
+
+  '/files/{fileId}':
+    get:
+      operationId: getFileById
+      summary: '{{ t "operations.getFileById.summary" }}'
+      tags:
+        - File
+      parameters:
+        - name: fileId
+          in: path
+          description: '{{ t "operations.getFileById.parameter.fileId.description" }}'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: '{{ t "operations.getFileById.responses.200.description" }}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/GenericError'
+
+  '/contracts':
+    get:
+      operationId: listContracts
+      summary: '{{ t "operations.listContracts.summary" }}'
+      tags:
+        - Contract
+      responses:
+        '200':
+          description: '{{ t "operations.listContracts.responses.200.description" }}'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Contract'
+    post:
+      operationId: createContract
+      summary: '{{ t "operations.createContract.summary" }}'
+      tags:
+        - Contract
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contract:
+                  $ref: '#/components/schemas/Contract'
+      responses:
+        '200':
+          description: '{{ t "operations.createContract.responses.200.description" }}'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Contract'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/GenericError'
+
+  '/contracts/{contractId}':
+    get:
+      operationId: getContractById
+      summary: '{{ t "operations.getContractById.summary" }}'
+      tags:
+        - Contract
+      parameters:
+        - name: contractId
+          in: path
+          description: '{{ t "operations.getContractById.parameter.contractId.description" }}'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: '{{ t "operations.getContractById.responses.200.description" }}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/GenericError'
+    patch:
+      operationId: updateContract
+      summary: '{{ t "operations.updateContract.summary" }}'
+      tags:
+        - Contract
+      parameters:
+        - name: contractId
+          in: path
+          description: '{{ t "operations.updateContract.parameter.contractId.description" }}'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contract:
+                  $ref: '#/components/schemas/Contract'
+      responses:
+        '200':
+          description: '{{ t "operations.updateContract.responses.200.description" }}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/GenericError'
+    delete:
+      operationId: deleteContract
+      summary: '{{ t "operations.deleteContract.summary" }}'
+      tags:
+        - Contract
+      parameters:
+        - name: contractId
+          in: path
+          description: '{{ t "operations.deleteContract.parameter.contractId.description" }}'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: '{{ t "operations.deleteContract.responses.204.description" }}'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/GenericError'
+
+  '/contracts/{contractId}/shares':
+    get:
+      operationId: listContractShares
+      summary: '{{ t "operations.listContractShares.summary" }}'
+      tags:
+        - Contract
+      responses:
+        '200':
+          description: '{{ t "operations.listContractShares.responses.200.description" }}'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Sharing'
+    post:
+      operationId: createContractShare
+      summary: '{{ t "operations.createContractShare.summary" }}'
+      tags:
+        - Contract
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sharing:
+                  $ref: '#/components/schemas/Sharing'
+      responses:
+        '200':
+          description: '{{ t "operations.createContractShare.responses.200.description" }}'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Sharing'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/GenericError'
+
+  '/contracts/{contractId}/shares/{sharingId}':
+    get:
+      operationId: getContractSharingById
+      summary: '{{ t "operations.getContractSharingById.summary" }}'
+      tags:
+        - Contract
+      parameters:
+        - name: contractId
+          in: path
+          description: '{{ t "operations.getContractSharingById.parameter.contractId.description" }}'
+          required: true
+          schema:
+            type: integer
+        - name: sharingId
+          in: path
+          description: '{{ t "operations.getContractSharingById.parameter.sharingId.description" }}'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: '{{ t "operations.getContractSharingById.responses.200.description" }}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sharing'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/GenericError'
+    patch:
+      operationId: updateContractSharing
+      summary: '{{ t "operations.updateContractSharing.summary" }}'
+      tags:
+        - Contract
+      parameters:
+        - name: contractId
+          in: path
+          description: '{{ t "operations.updateContractSharing.parameter.contractId.description" }}'
+          required: true
+          schema:
+            type: integer
+        - name: sharingId
+          in: path
+          description: '{{ t "operations.updateContractSharing.parameter.sharingId.description" }}'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sharing:
+                  $ref: '#/components/schemas/Sharing'
+      responses:
+        '200':
+          description: '{{ t "operations.updateContractSharing.responses.200.description" }}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sharing'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/GenericError'
+    delete:
+      operationId: deleteContractSharing
+      summary: '{{ t "operations.deleteContractSharing.summary" }}'
+      tags:
+        - Contract
+      parameters:
+        - name: contractId
+          in: path
+          description: '{{ t "operations.deleteContractSharing.parameter.contractId.description" }}'
+          required: true
+          schema:
+            type: integer
+        - name: sharingId
+          in: path
+          description: '{{ t "operations.deleteContractSharing.parameter.sharingId.description" }}'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: '{{ t "operations.deleteContractSharing.responses.204.description" }}'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/GenericError'
+
+  '/parties':
+    get:
+      operationId: listParties
+      summary: '{{ t "operations.listParties.summary" }}'
+      tags:
+        - Party
+      responses:
+        '200':
+          description: '{{ t "operations.listParties.responses.200.description" }}'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Party'
+    post:
+      operationId: createParty
+      summary: '{{ t "operations.createParty.summary" }}'
+      tags:
+        - Party
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                party:
+                  $ref: '#/components/schemas/Party'
+      responses:
+        '200':
+          description: '{{ t "operations.createParty.responses.200.description" }}'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Party'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/GenericError'
+
+  '/parties/{partyId}':
+    get:
+      operationId: getPartyById
+      summary: '{{ t "operations.getPartyById.summary" }}'
+      tags:
+        - Party
+      parameters:
+        - name: partyId
+          in: path
+          description: '{{ t "operations.getPartyById.parameter.partyId.description" }}'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: '{{ t "operations.getPartyById.responses.200.description" }}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Party'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/GenericError'
+    patch:
+      operationId: updateParty
+      summary: '{{ t "operations.updateParty.summary" }}'
+      tags:
+        - Party
+      parameters:
+        - name: partyId
+          in: path
+          description: '{{ t "operations.updateParty.parameter.partyId.description" }}'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                party:
+                  $ref: '#/components/schemas/Party'
+      responses:
+        '200':
+          description: '{{ t "operations.updateParty.responses.200.description" }}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Party'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/GenericError'
+    delete:
+      operationId: deleteParty
+      summary: '{{ t "operations.deleteParty.summary" }}'
+      tags:
+        - Party
+      parameters:
+        - name: partyId
+          in: path
+          description: '{{ t "operations.deleteParty.parameter.partyId.description" }}'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: '{{ t "operations.deleteParty.responses.204.description" }}'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/GenericError'
+
+  '/proofs':
+    post:
+      operationId: createProof
+      summary: '{{ t "operations.createProof.summary" }}'
+      tags:
+        - Proof
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                proof:
+                  $ref: '#/components/schemas/Proof'
+      responses:
+        '200':
+          description: '{{ t "operations.createProof.responses.200.description" }}'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Proof'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/GenericError'
+
+  '/proofs/{proofId}':
+    get:
+      operationId: getProofById
+      summary: '{{ t "operations.getProofById.summary" }}'
+      tags:
+        - Proof
+      parameters:
+        - name: proofId
+          in: path
+          description: '{{ t "operations.getProofById.parameter.proofId.description" }}'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: '{{ t "operations.getProofById.responses.200.description" }}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Proof'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/GenericError'
+    delete:
+      operationId: deleteProof
+      summary: '{{ t "operations.deleteProof.summary" }}'
+      tags:
+        - Proof
+      parameters:
+        - name: proofId
+          in: path
+          description: '{{ t "operations.deleteProof.parameter.proofId.description" }}'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: '{{ t "operations.deleteProof.responses.204.description" }}'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/GenericError'
+
+components:
+  securitySchemes:
+    apiKey:
+      type: http
+      scheme: bearer
+
+  responses:
+    Unauthorized:
+      description: '{{ t "components.response.Unauthorized.description" }}'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Forbidden:
+      description: '{{ t "components.response.Forbidden.description" }}'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    NotFound:
+      description: '{{ t "components.response.NotFound.description" }}'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    GenericError:
+      description: '{{ t "components.response.GenericError.description" }}'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    File:
+      required:
+        - id
+        - name
+        - mime
+        - size
+        - preview_url
+        - download_url
+        - inserted_at
+        - updated_at
+      properties:
+        id:
+          description: '{{ t "components.schemas.File.properties.id" }}'
+          type: integer
+          example: 12
+        name:
+          description: '{{ t "components.schemas.File.properties.name" }}'
+          type: string
+          example: filename.pdf
+        mime:
+          description: '{{ t "components.schemas.File.properties.mime" }}'
+          type: string
+          example: application/pdf
+        size:
+          description: '{{ t "components.schemas.File.properties.size" }}'
+          type: integer
+          example: 144093
+        preview_url:
+          description: '{{ t "components.schemas.File.properties.preview_url" }}'
+          type: string
+          example: https://s3-sa-east-1.amazonaws.com/bucket/filename.pdf?aws_signature
+        download_url:
+          description: '{{ t "components.schemas.File.properties.download_url" }}'
+          type: string
+          example: https://s3-sa-east-1.amazonaws.com/bucket/filename.pdf?aws_signature
+        inserted_at:
+          description: '{{ t "components.schemas.File.properties.inserted_at" }}'
+          type: string
+          example: '2019-03-13T17:00:08.322870'
+        updated_at:
+          description: '{{ t "components.schemas.File.properties.updated_at" }}'
+          type: string
+          example: '2019-03-13T17:00:08.322885'
+
+    Contract:
+      required:
+      - id
+      - inserted_at
+      - updated_at
+      properties:
+        id:
+          type: integer
+          description: '{{ t "components.schemas.Contract.properties.id" }}'
+          example: 25
+        number:
+          type: string
+          description: '{{ t "components.schemas.Contract.properties.number" }}'
+          example: 2019/5
+        title:
+          type: string
+          description: '{{ t "components.schemas.Contract.properties.title" }}'
+        object:
+          type: string
+          description: '{{ t "components.schemas.Contract.properties.object" }}'
+        observations:
+          type: string
+          description: '{{ t "components.schemas.Contract.properties.observations" }}'
+        classifier:
+          type: array
+          description: '{{ t "components.schemas.Contract.properties.classifier" }}'
+          items:
+            type: string
+          example:
+            - 'Tag1'
+            - 'Tag2'
+        begin_date:
+          type: string
+          description: '{{ t "components.schemas.Contract.properties.begin_date" }}'
+          example: '2019-03-13'
+        end_date:
+          type: string
+          description: '{{ t "components.schemas.Contract.properties.end_date" }}'
+          example: '2019-03-13'
+        term_type:
+          type: string
+          description: '{{ t "components.schemas.Contract.properties.term_type" }}'
+          default: Determinado
+          enum:
+            - Indeterminado
+            - Determinado
+        due_notice:
+          type: integer
+          description: '{{ t "components.schemas.Contract.properties.due_notice" }}'
+          default: 60
+          example: 120
+        shares:
+          type: array
+          description: '{{ t "components.schemas.Contract.properties.shares" }}'
+          items:
+            $ref: '#/components/schemas/Sharing'
+        custom_fields:
+          type: array
+          description: '{{ t "components.schemas.Contract.properties.custom_fields" }}'
+          items:
+            $ref: '#/components/schemas/CustomField'
+        deleted:
+          type: boolean
+          description: '{{ t "components.schemas.Contract.properties.deleted" }}'
+          default: false
+          example: false
+        archived:
+          type: boolean
+          description: '{{ t "components.schemas.Contract.properties.archived" }}'
+          default: false
+          example: false
+        inserted_at:
+          type: string
+          description: '{{ t "components.schemas.Contract.properties.inserted_at" }}'
+          example: '2019-03-12T19:20:11.350947'
+        updated_at:
+          type: string
+          description: '{{ t "components.schemas.Contract.properties.updated_at" }}'
+          example: '2019-03-12T19:20:11.350959'
+
+    Sharing:
+      required:
+        - id
+        - party
+        - qualification
+        - inserted_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+          description: '{{ t "components.schemas.Sharing.properties.id" }}'
+          example: 23
+        company:
+          allOf:
+            - description: '{{ t "components.schemas.Sharing.properties.company" }}'
+            - $ref: '#/components/schemas/Party'
+        party:
+          allOf:
+            - description: '{{ t "components.schemas.Sharing.properties.party" }}'
+            - $ref: '#/components/schemas/Party'
+        qualification:
+          type: string
+          description: '{{ t "components.schemas.Sharing.properties.qualification" }}'
+          example: '{{ faker "name.jobTitle" }}'
+        order:
+          type: integer
+          description: '{{ t "components.schemas.Sharing.properties.order" }}'
+          example: 4
+        inserted_at:
+          type: string
+          description: '{{ t "components.schemas.Sharing.properties.inserted_at" }}'
+          example: '2019-03-12T19:20:11.350947'
+        updated_at:
+          type: string
+          description: '{{ t "components.schemas.Sharing.properties.updated_at" }}'
+          example: '2019-03-12T19:20:11.350959'
+
+    Party:
+      required:
+        - id
+        - person_type
+        - name
+      properties:
+        id:
+          type: integer
+          description: '{{ t "components.schemas.Party.properties.id" }}'
+          example: 21
+        person_type:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.person_type" }}'
+          default: pf
+          example: pj
+          enum:
+            - pf
+            - pj
+        name:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.name" }}'
+          example: '{{ faker "company.companyName" }}'
+        trade_name:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.trade_name" }}'
+          example: '{{ faker "company.companyName" }}'
+        email:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.email" }}'
+          example: '{{ faker "internet.email" }}'
+        document:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.document" }}'
+          example: '000.000.000-00'
+        national_id:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.national_id" }}'
+          example: '0.000.000-0'
+        birth_date:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.birth_date" }}'
+          example: '1991-01-01'
+        marital_status:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.marital_status" }}'
+          enum:
+            - married
+            - single
+            - divorced
+            - widower
+        nationality:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.nationality" }}'
+          example: 'brasileiro'
+        city_subscription:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.city_subscription" }}'
+          example: '0000000000'
+        state_subscription:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.state_subscription" }}'
+          example: '0000000000'
+        profession:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.profession" }}'
+          example: '{{ faker "name.jobTitle" }}'
+        reference:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.reference" }}'
+          example: '0000000000'
+        phone:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.phone" }}'
+          example: '{{ faker "phone.phoneNumber" }}'
+        address_zip_code:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.address_zip_code" }}'
+          example: '{{ faker "address.zipCode" }}'
+        address_street:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.address_street" }}'
+          example: '{{ faker "address.streetName" }}'
+        address_number:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.address_number" }}'
+          example: '{{ faker "random.number" }}'
+        address_complement:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.address_complement" }}'
+          example: 'Apt 32'
+        address_neighborhood:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.address_neighborhood" }}'
+          example: '{{ faker "address.county" }}'
+        address_city:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.address_city" }}'
+          example: '{{ faker "address.city" }}'
+        address_state:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.address_state" }}'
+          example: '{{ faker "address.stateAbbr" }}'
+        address_country:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.address_country" }}'
+          example: '{{ faker "address.country" }}'
+        contact_email:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.contact_email" }}'
+          example: '{{ faker "internet.email" }}'
+        contact_name:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.contact_name" }}'
+          example: '{{ faker "name.findName" }}'
+        contact_phone:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.contact_phone" }}'
+          example: '{{ faker "phone.phoneNumber" }}'
+        inserted_at:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.inserted_at" }}'
+          example: '2019-03-12T19:20:11.350947'
+        updated_at:
+          type: string
+          description: '{{ t "components.schemas.Party.properties.updated_at" }}'
+          example: '2019-03-12T19:20:11.350959'
+
+    Proof:
+      required:
+        - id
+        - engine
+        - status
+        - subjects
+        - events
+        - inserted_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+          description: '{{ t "components.schemas.Proof.properties.id" }}'
+          example: 45
+        engine:
+          type: string
+          description: '{{ t "components.schemas.Proof.properties.engine" }}'
+          example: standard
+          enum:
+            - standard
+            - certificate
+        ordered:
+          type: boolean
+          description: '{{ t "components.schemas.Proof.properties.ordered" }}'
+        status:
+          type: string
+          description: '{{ t "components.schemas.Proof.properties.status" }}'
+          example: pending
+          enum:
+            - pending
+            - completed
+            - canceled
+        signing_file:
+          allOf:
+            - description: '{{ t "components.schemas.Proof.properties.signing_file" }}'
+            - $ref: '#/components/schemas/File'
+        signed_file:
+          allOf:
+            - description: '{{ t "components.schemas.Proof.properties.signed_file" }}'
+            - $ref: '#/components/schemas/File'
+        receipt_file:
+          allOf:
+            - description: '{{ t "components.schemas.Proof.properties.receipt_file" }}'
+            - $ref: '#/components/schemas/File'
+        preview_file:
+          allOf:
+            - description: '{{ t "components.schemas.Proof.properties.preview_file" }}'
+            - $ref: '#/components/schemas/File'
+        packaged_file:
+          allOf:
+            - description: '{{ t "components.schemas.Proof.properties.packaged_file" }}'
+            - $ref: '#/components/schemas/File'
+        original_file:
+          allOf:
+            - description: '{{ t "components.schemas.Proof.properties.original_file" }}'
+            - $ref: '#/components/schemas/File'
+        subjects:
+          type: array
+          description: '{{ t "components.schemas.Proof.properties.subjects" }}'
+          items:
+            $ref: '#/components/schemas/ProofSubject'
+        events:
+          type: array
+          description: '{{ t "components.schemas.Proof.properties.events" }}'
+          items:
+            $ref: '#/components/schemas/ProofEvent'
+        deleted_at:
+          type: string
+          description: '{{ t "components.schemas.Proof.properties.deleted_at" }}'
+          example: '2019-03-12T19:20:11.350947'
+        inserted_at:
+          type: string
+          description: '{{ t "components.schemas.Proof.properties.inserted_at" }}'
+          example: '2019-03-12T19:20:11.350947'
+        updated_at:
+          type: string
+          description: '{{ t "components.schemas.Proof.properties.updated_at" }}'
+          example: '2019-03-12T19:20:11.350959'
+
+    ProofSubject:
+      required:
+        - id
+        - qualification
+        - email
+        - party
+        - name
+        - inserted_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+          description: '{{ t "components.schemas.ProofSubject.properties.id" }}'
+          example: 45
+        order:
+          type: integer
+          description: '{{ t "components.schemas.ProofSubject.properties.order" }}'
+          example: 3
+        qualification:
+          type: string
+          description: '{{ t "components.schemas.ProofSubject.properties.qualification" }}'
+          example: '{{ faker "name.jobTitle" }}'
+        email:
+          type: string
+          description: '{{ t "components.schemas.ProofSubject.properties.email" }}'
+          example: '{{ faker "internet.email" }}'
+        party:
+          allOf:
+            - description: '{{ t "components.schemas.ProofSubject.properties.party" }}'
+            - $ref: '#/components/schemas/Party'
+        company:
+          allOf:
+            - description: '{{ t "components.schemas.ProofSubject.properties.company" }}'
+            - $ref: '#/components/schemas/Party'
+        name:
+          type: string
+          description: '{{ t "components.schemas.ProofSubject.properties.name" }}'
+          example: '{{ faker "name.findName" }}'
+        company_name:
+          type: string
+          description: '{{ t "components.schemas.ProofSubject.properties.company_name" }}'
+          example: '{{ faker "company.companyName" }}'
+        company_document:
+          type: string
+          description: '{{ t "components.schemas.ProofSubject.properties.company_document" }}'
+          example: '000000000000'
+        certificate_name:
+          type: string
+          description: '{{ t "components.schemas.ProofSubject.properties.certificate_name" }}'
+          example: '{{ faker "name.findName" }}'
+        certificate_email:
+          type: string
+          description: '{{ t "components.schemas.ProofSubject.properties.certificate_email" }}'
+          example: '{{ faker "internet.email" }}'
+        certificate_document:
+          type: string
+          description: '{{ t "components.schemas.ProofSubject.properties.certificate_document" }}'
+          example: '0000000000000'
+        certificate_company_name:
+          type: string
+          description: '{{ t "components.schemas.ProofSubject.properties.certificate_company_name" }}'
+          example: '{{ faker "company.companyName" }}'
+        certificate_company_document:
+          type: string
+          description: '{{ t "components.schemas.ProofSubject.properties.certificate_company_document" }}'
+          example: '0000000000000'
+        sent_at:
+          type: string
+          description: '{{ t "components.schemas.ProofSubject.properties.sent_at" }}'
+          example: '2019-03-12T19:20:11.350947'
+        confirmed_user_agent:
+          type: string
+          description: '{{ t "components.schemas.ProofSubject.properties.confirmed_user_agent" }}'
+          example: 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'
+        confirmed_ip_address:
+          type: string
+          description: '{{ t "components.schemas.ProofSubject.properties.confirmed_ip_address" }}'
+          example: '127.0.0.1'
+        confirmed_at:
+          type: string
+          description: '{{ t "components.schemas.ProofSubject.properties.confirmed_at" }}'
+          example: '2019-03-12T19:20:11.350947'
+        inserted_at:
+          type: string
+          description: '{{ t "components.schemas.ProofSubject.properties.inserted_at" }}'
+          example: '2019-03-12T19:20:11.350947'
+        updated_at:
+          type: string
+          description: '{{ t "components.schemas.ProofSubject.properties.updated_at" }}'
+          example: '2019-03-12T19:20:11.350959'
+
+    ProofEvent:
+      required:
+        - id
+        - action
+        - inserted_at
+      properties:
+        id:
+          type: integer
+          description: '{{ t "components.schemas.ProofEvent.properties.id" }}'
+          example: 82
+        action:
+          type: string
+          description: '{{ t "components.schemas.ProofEvent.properties.action" }}'
+        subject:
+          allOf:
+            - description: '{{ t "components.schemas.ProofEvent.properties.subject" }}'
+            - $ref: '#/components/schemas/ProofSubject'
+        inserted_at:
+          type: string
+          description: '{{ t "components.schemas.ProofEvent.properties.inserted_at" }}'
+          example: '2019-03-12T19:20:11.350947'
+
+    CustomField:
+      required:
+        - key
+      properties:
+        key:
+          type: string
+          description: '{{ t "components.schemas.CustomField.properties.key" }}'
+        value:
+          type: string
+          description: '{{ t "components.schemas.CustomField.properties.value" }}'
+
+    Error:
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          example: 'Something went wrong'
+

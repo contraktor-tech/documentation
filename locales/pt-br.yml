@@ -1,0 +1,206 @@
+info.title: Contraktor API
+info.description: Esta é a documentação da Contraktor API
+
+servers.local.description: Servidor local (ambiente de desenvolvimento)
+servers.qa.description: Servidor de testes
+servers.production.description: Servidor de produção
+
+tags.File.description: |
+  Todo *upload* de arquivo no sistema (seja ele um PDF, DOC,
+  imagem, etc.) deve ser feito por este *endpoint*. Será gerado um
+  registro imutável para cada *upload* de arquivo, com um identificador
+  único chamado **File ID**.
+
+
+  Esse **File ID** pode ser utilizado em outros *endpoints*
+  para especificar um arquivo. Por exemplo, ao criar um contrato, podemos
+  referenciar um **File ID** identificando o PDF do documento principal a ser
+  assinado.
+tags.Contract.description: |
+  Um *Contrato* é o registro principal dentro da Contraktor. Ele armazena
+  todos os dados relacionados ao seu contrato (datas de vigência, assinantes,
+  tags, etc.). Todo contrato tem um identificador único chamado **Contract ID**.
+tags.Party.description: |
+  As partes representam as pessoas (física ou jurídica) de um contrato. O seu
+  registro contém todos os dados cadastrados no sistema sobre a pessoa (endereço,
+  nome, documentos, etc.). Relacionando partes aos contratos, podemos preencher
+  os dados de um modelo de contrato e também fazer o envio para assinatura.
+tags.Proof.description: |
+  As assinaturas e aprovações de um contrato são chamadas de **Proofs** (ou provas)
+  e cada registro indica o mecanismo de prova que foi utilizado (campo *engine*).
+  Atualmente possuímos dois mecanismos em funcionamento: **contraktor**
+  e **certificate**.
+
+  - **contraktor**: Assinatura eletrônica intermediada pela Contraktor;
+
+  - **certificate**: Assinatura digital utilizando certificado digital A3.
+
+
+  Cada prova é relacionada um contrato, e um contrato pode conter várias provas.
+  No registro de cada prova também são armazenados de forma imutável uma série de
+  documentos para comprovações e verificações.
+
+operations.createFile.summary: Cria um arquivo (upload)
+operations.createFile.responses.200.description: O arquivo criado
+
+operations.getFileById.summary: Busca um arquivo pelo File ID
+operations.getFileById.parameter.fileId.description: File ID para buscar
+operations.getFileById.responses.200.description: O registro do arquivo
+
+operations.listContracts.summary: Lista todos os contratos
+operations.listContracts.responses.200.description: Uma lista paginada de contratos
+operations.createContract.summary: Cria um contrato
+operations.createContract.responses.200.description: O contrato criado
+operations.getContractById.summary: Busca um contrato pelo Contract ID
+operations.getContractById.parameter.contractId.description: O ID do contrato a ser buscado
+operations.getContractById.responses.200.description: O contrato encontrado
+operations.updateContract.summary: Atualizar um contrato
+operations.updateContract.parameter.contractId.description: O ID do contrato a ser atualizado
+operations.updateContract.responses.200.description: O contrato atualizado
+operations.deleteContract.summary: Remover um contrato
+operations.deleteContract.parameter.contractId.description: O ID do contrato a ser removido
+operations.deleteContract.responses.204.description: Contrato removido, nenhum dado a ser exibido
+operations.listContractShares.summary: Lista os participantes de um contrato
+operations.listContractShares.responses.200.description: Uma lista com os participantes de um contrato
+operations.createContractShare.summary: Adiciona um participante a um contrato
+operations.createContractShare.responses.200.description: O registro do participante no contrato
+operations.getContractSharingById.summary: Busca um participante de um contrato pelo seu ID
+operations.getContractSharingById.parameter.contractId.description: O Contract ID que identifica o contrato
+operations.getContractSharingById.parameter.sharingId.description: O Sharing ID (ou ID do participante) a buscar
+operations.getContractSharingById.responses.200.description: O registro do participante encontrado
+operations.updateContractSharing.summary: Atualiza um participante de um contrato
+operations.updateContractSharing.parameter.contractId.description: O Contract ID que identifica o contrato
+operations.updateContractSharing.parameter.sharingId.description: O Sharing ID (ou ID do participante) a buscar
+operations.updateContractSharing.responses.200.description: O registro do participante atualizado
+operations.deleteContractSharing.summary: Remove um participante de um contrato
+operations.deleteContractSharing.parameter.contractId.description: O Contract ID que identifica o contrato
+operations.deleteContractSharing.parameter.sharingId.description: O Sharing ID (ou ID do participante) a buscar
+operations.deleteContractSharing.responses.204.description: Registro removido, nenhum dado a ser exibido
+
+operations.listParties.summary: Lista todos as partes registradas no sistema
+operations.listParties.responses.200.description: Uma lista paginada de partes
+operations.createParty.summary: Cria uma nova parte
+operations.createParty.responses.200.description: A parte criada
+operations.getPartyById.summary: Busca uma parte pelo Party ID
+operations.getPartyById.parameter.partyId.description: O ID da parte a ser buscada
+operations.getPartyById.responses.200.description: O parte encontrada
+operations.updateParty.summary: Atualizar uma parte
+operations.updateParty.parameter.partyId.description: O ID da parte a ser atualizada
+operations.updateParty.responses.200.description: A parte atualizada
+operations.deleteParty.summary: Remover uma parte
+operations.deleteParty.parameter.partyId.description: O ID da parte a ser removida
+operations.deleteParty.responses.204.description: Parte removida, nenhum dado a ser exibido
+
+operations.createProof.summary: Inicia um processo de prova (assinatura, aprovação, etc.)
+operations.createProof.responses.200.description: O registro da prova em seu estado inicial
+operations.getProofById.summary: Busca o registro de uma prova pelo Proof ID
+operations.getProofById.parameter.proofId.description: O ID da prova a ser buscada
+operations.getProofById.responses.200.description: O registro da prova no estado atual
+operations.deleteProof.summary: Cancela o procedimento de prova (cancela uma assinatura)
+operations.deleteProof.parameter.proofId.description: O ID da prova a ser cancelada
+operations.deleteProof.responses.200.description: O registro da prova em seu estado cancelado
+
+components.response.Unauthorized.description: Autenticação é requerida para o recurso especificado
+components.response.Forbidden.description: Permissões insuficientes para o recurso especificado
+components.response.NotFound.description: O recurso especificado não foi encontrado
+components.response.GenericError.description: Algo de errado aconteceu
+
+components.schemas.File.properties.id: File ID, indentificador único do arquivo
+components.schemas.File.properties.name: Nome do arquivo como identificado no momento do upload
+components.schemas.File.properties.mime: Tipo do arquivo (mimetype)
+components.schemas.File.properties.size: Tamanho do arquivo em bytes
+components.schemas.File.properties.preview_url: URL para download do arquivo em PDF (conversão automática)
+components.schemas.File.properties.download_url: URL para download do arquivo no formato original
+components.schemas.File.properties.inserted_at: Data de inserção do arquivo no sistema
+components.schemas.Contract.properties.id: Contract ID, identificador único do contrato
+components.schemas.Contract.properties.number: Número do contrato
+components.schemas.Contract.properties.title: Título do contrato
+components.schemas.Contract.properties.object: Objeto do contrato
+components.schemas.Contract.properties.observations: Observações do contrato
+components.schemas.Contract.properties.classifier: Tags do contrato (classificador)
+components.schemas.Contract.properties.begin_date: Data de ínicio da vigência do contrato
+components.schemas.Contract.properties.end_date: Data de fim da vigência do contrato
+components.schemas.Contract.properties.term_type: Indicador de prazo "Determinado" ou "Indeterminado". Quando o prazo é Indeterminado, significa que ele não tem uma data de fim da vigência
+components.schemas.Contract.properties.due_notice: Número de dias antes da data de fim da vigência para iniciar os alertas de vencimento do contrato
+components.schemas.Contract.properties.shares: Lista de participantes do contrato
+components.schemas.Contract.properties.custom_fields: Lista de campos customizados do contrato
+components.schemas.Contract.properties.deleted: Indicador de contrato removido (presente na lixeira)
+components.schemas.Contract.properties.archived: Indicador de contrato arquivado
+components.schemas.Contract.properties.inserted_at: Data de inserção do contrato no sistema
+components.schemas.Contract.properties.updated_at: Data da última atualização do contrato no sistema
+components.schemas.Sharing.properties.id: Sharing ID, identificador único do participante
+components.schemas.Sharing.properties.company: Referência a parte do tipo pessoa jurídica que contém os dados deste participante
+components.schemas.Sharing.properties.party: Referência a parte do tipo pessoa física que contém os dados deste participante
+components.schemas.Sharing.properties.qualification: Qualificação do participante no contrato (Contratante, Contratada, etc.)
+components.schemas.Sharing.properties.order: Número que indica a ordem deste participante para assinatura
+components.schemas.Sharing.properties.inserted_at: Data de inserção do participante no contrato
+components.schemas.Sharing.properties.updated_at: Data da última atualização do participante no contrato
+components.schemas.Party.properties.id: Party ID, identificador único da parte
+components.schemas.Party.properties.person_type: 'Tipo de parte: pessoa física (pf) ou pessoa jurídica (pj)'
+components.schemas.Party.properties.name: Nome completo da pessoa física ou razão social de pessoa jurídica
+components.schemas.Party.properties.trade_name: Nome fantasia (apenas PJ)
+components.schemas.Party.properties.email: Email (apenas PF)
+components.schemas.Party.properties.document: CPF para pessoa física ou CNPJ para pessoa jurídica
+components.schemas.Party.properties.national_id: Número do documento nacional (RG para brasileiros, apenas PF)
+components.schemas.Party.properties.birth_date: Data de nascimento para pessoa física ou data de fundação para pessoa jurídica
+components.schemas.Party.properties.marital_status: Estado civil (apenas PF)
+components.schemas.Party.properties.nationality: Nacionalidade (apenas PF)
+components.schemas.Party.properties.city_subscription: Inscrição municipal (apenas PJ)
+components.schemas.Party.properties.state_subscription: Inscrição estadual (apenas PJ)
+components.schemas.Party.properties.profession: Profissão (apenas PF)
+components.schemas.Party.properties.reference: Número de referência utilizado para algumas integrações
+components.schemas.Party.properties.phone: Número de telefone
+components.schemas.Party.properties.address_zip_code: Código postal
+components.schemas.Party.properties.address_street: Nome da rua, avenida, etc. (logradouro)
+components.schemas.Party.properties.address_number: Número do endereço
+components.schemas.Party.properties.address_complement: Complemento do endereço
+components.schemas.Party.properties.address_neighborhood: Bairro
+components.schemas.Party.properties.address_city: Cidade ou município
+components.schemas.Party.properties.address_state: Estado
+components.schemas.Party.properties.address_country: País
+components.schemas.Party.properties.contact_email: Email da pessoa de contato (apenas PJ)
+components.schemas.Party.properties.contact_name: Nome completo da pessoa de contato (apenas PJ)
+components.schemas.Party.properties.contact_phone: Telefone da pessoa de contato (apenas PJ)
+components.schemas.Party.properties.inserted_at: Data de inserção da parte no sistema
+components.schemas.Party.properties.updated_at: Data da última atualização da parte no sistema
+components.schemas.Proof.properties.id: File ID, indentificador único da prova (assinatura, aprovação, etc.)
+components.schemas.Proof.properties.engine: Mecanismo de prova
+components.schemas.Proof.properties.ordered: Indica se a prova será dada de forma ordenada
+components.schemas.Proof.properties.status: Status em que a prova se encontra
+components.schemas.Proof.properties.original_file: Arquivo original, como era antes do início do processo
+components.schemas.Proof.properties.signing_file: Arquivo que está sendo assinado (contendo marcações no rodapé, etc.)
+components.schemas.Proof.properties.signed_file: Arquivo assinado
+components.schemas.Proof.properties.receipt_file: Arquivo do recibo de assinatura
+components.schemas.Proof.properties.packaged_file: Pacote (ZIP) com todos os arquivos da assinatura
+components.schemas.Proof.properties.subjects: Lista de assinantes
+components.schemas.Proof.properties.events: Sequência de eventos da prova
+components.schemas.Proof.properties.deleted_at: Caso a prova foi cancelada, contém a data de cancelamento
+components.schemas.Proof.properties.inserted_at: Data de início do processo de prova
+components.schemas.Proof.properties.updated_at: Data da última atualização do registro
+components.schemas.ProofSubject.properties.id: ProofSubject ID, identificador único de um assinante
+components.schemas.ProofSubject.properties.order: Ordem do assinante no processo
+components.schemas.ProofSubject.properties.qualification: Qualificação do assinante
+components.schemas.ProofSubject.properties.party: Referência a parte que contém os dados do assinante
+components.schemas.ProofSubject.properties.company: Referência a parte pessoa jurídica que contém os dados da empresa que o assinante representa
+components.schemas.ProofSubject.properties.name: Nome do assinante
+components.schemas.ProofSubject.properties.email: Email do assinante
+components.schemas.ProofSubject.properties.document: CPF do assinante
+components.schemas.ProofSubject.properties.company_name: Nome da empresa que o assinante representa
+components.schemas.ProofSubject.properties.company_document: CNPJ da empresa que o assinante representa
+components.schemas.ProofSubject.properties.certificate_name: Nome do assinante como está no certificado digital
+components.schemas.ProofSubject.properties.certificate_email: Email do assinante como está no certificado digital
+components.schemas.ProofSubject.properties.certificate_document: CPF do assinante como está no certificado digital
+components.schemas.ProofSubject.properties.certificate_company_name: Nome da empresa que o assinante representa como está no certificado digital
+components.schemas.ProofSubject.properties.certificate_company_document: CNPJ da empresa que o assinante representa como está no certificado digital
+components.schemas.ProofSubject.properties.sent_at: Data de envio do email solicitando assinatura
+components.schemas.ProofSubject.properties.confirmed_user_agent: '"User-Agent" utilizado pelo assinante no momento de assinatura'
+components.schemas.ProofSubject.properties.confirmed_ip_address: Endereço IP do assinante no momento de assinatura
+components.schemas.ProofSubject.properties.confirmed_at: Data de assinatura
+components.schemas.ProofSubject.properties.inserted_at: Data de inserção do registro
+components.schemas.ProofSubject.properties.updated_at: Data da última atualização do registro
+components.schemas.ProofEvent.properties.id: ProofEvent ID, identificador único do evento
+components.schemas.ProofEvent.properties.action: Descrição da ação realizada
+components.schemas.ProofEvent.properties.subject: Referência ao assinante que realizou a ação, caso se aplique
+components.schemas.ProofEvent.properties.inserted_at: Data de inserção do registro
+components.schemas.CustomField.properties.key: Nome do campo adicional (chave)
+components.schemas.CustomField.properties.value: Valor do campo adicional
