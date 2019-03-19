@@ -1,8 +1,7 @@
 info.title: Contraktor API
 info.description: Contraktor API
 
-servers.local.description: Servidor local (ambiente de desenvolvimento)
-servers.qa.description: Servidor de testes
+servers.sandbox.description: Servidor Sandbox (dados de teste)
 servers.production.description: Servidor de produção
 
 tags.File.description: |

@@ -9,7 +9,7 @@ info:
     Em [github.com/Contraktor-Legal-Tech/contraktor-api](https://github.com/Contraktor-Legal-Tech/contraktor-api/tree/master/examples),
     você pode encontrar exemplos em Node.js de como utilizar a API.
 
-    ## Quick start
+    ## Guia rápido
 
     Antes de mais nada, é preciso obter uma chave de API (Api Key) para
     realizar as chamadas. Contate nosso suporte técnico pela plataforma
@@ -94,10 +94,8 @@ info:
     ```
 
 servers:
-  - url: /api
-    description: '{{ t "servers.local.description" }}'
-  - url: https://api-qa.contraktor.com.br/api
-    description: '{{ t "servers.qa.description" }}'
+  - url: https://api-sandbox.contraktor.com.br/api
+    description: '{{ t "servers.sandbox.description" }}'
   - url: https://api.contraktor.com.br/api/v1
     description: '{{ t "servers.production.description" }}'
 
