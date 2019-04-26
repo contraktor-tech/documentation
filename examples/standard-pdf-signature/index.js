@@ -20,9 +20,9 @@ async function handleApiResponse(res) {
 
 /**
  * Uploads a file by its filename to Contraktor
- * 
+ *
  * @param {string} filename - Path to the file in you filesystem to upload
- * 
+ *
  * @returns {Promise} Returns a promise that resolves to the created File resource.
  */
 function uploadFile(filename) {
@@ -42,9 +42,9 @@ function uploadFile(filename) {
 
 /**
  * Creates a party in Contraktor
- * 
+ *
  * @param {Object} data - Data of the party to create
- * 
+ *
  * @returns {Promise} Returns a promise that resolves to the created Party resource.
  */
 function createParty(data) {
@@ -64,9 +64,9 @@ function createParty(data) {
 
 /**
  * Creates a contract using a uploaded file as base in Contraktor
- * 
+ *
  * @param {Object} file - File resource to use as base to create the contract
- * 
+ *
  * @returns {Promise} Returns a promise that resolves to the created Contract resource.
  */
 function createContractFromFile(file) {
@@ -98,12 +98,12 @@ function createContractFromFile(file) {
 
 /**
  * Shares a contract with a party in Contraktor
- * 
+ *
  * @param {Object} contract - Contract resource in wich the sharing will be applied
  * @param {string} qualification - Qualification to use for the Sharing
  * @param {Object} party - The Party object to use for the Sharing (PF)
  * @param {Object} [company] - If the Party represents a company, use this field to specify the Party object containing data for the company (PJ)
- * 
+ *
  * @returns {Promise} Returns a promise that resolves to the created Sharing resource.
  */
 function createContractSharing(contract, qualification, party, company) {
@@ -127,10 +127,10 @@ function createContractSharing(contract, qualification, party, company) {
 
 /**
  * Starts a proof process in Contraktor
- * 
+ *
  * @param {Object} contract - Contract resource in which the proof will be created
  * @param {string} engine - Name of the engine to use for the proof
- * 
+ *
  * @returns {Promise} Returns a promise that resolves to the created Proof resource.
  */
 function createProof(contract, engine) {
@@ -193,12 +193,12 @@ async function main() {
   await createContractSharing(contract, qualification, party2, company1);
 
   /*
-    Begin the signature process by creating a Proof of type 'test' on
+    Begin the signature process by creating a Proof of type 'standard' on
     the contract.
     At this point, both parties will be emailed with the request for
     signature.
   */
-  const proof = await createProof(contract, 'test');
+  const proof = await createProof(contract, 'standard');
 
   console.log('Assinatura iniciada:');
   console.log(JSON.stringify(proof, null, 2));
