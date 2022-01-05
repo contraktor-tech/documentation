@@ -10,7 +10,7 @@
     "faker": "^4.1.0",
     "glob": "^7.1.3",
     "handlebars": "^4.1.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "mkdirp": "^0.5.1",
     "node-polyglot": "^2.3.0",
     "yaml": "^1.4.0"
