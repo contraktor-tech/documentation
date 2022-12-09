@@ -16,7 +16,7 @@
     "yaml": "^1.4.0"
   },
   "devDependencies": {
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "http-proxy-middleware": "^0.19.1"
   }
 }
