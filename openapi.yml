@@ -690,6 +690,42 @@ paths:
         default:
           $ref: '#/components/responses/GenericError'
 
+  '/proofs/{proofId}/subjects/{proofSubjectId}/remind':
+    post:
+      operationId: remindProof
+      summary: 'Reenvia solicitação de assinatura por e-mail para um participante'
+      tags:
+        - Proof
+      parameters:
+        - name: proofId
+          in: path
+          description: 'O ID do proof do contrato'
+          required: true
+          schema:
+            type: integer
+        - name: proofSubjectId
+          in: path
+          description: 'O ID do ProofSubject do Proof que irá receber a notificação por e-mail'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Registro do participante do contrato que recebeu a solicitação'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ProofSubject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/GenericError'
+
   '/workflows':
     post:
       operationId: createWorkflow
