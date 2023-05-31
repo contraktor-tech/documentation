@@ -208,7 +208,18 @@ paths:
               type: object
               properties:
                 contract:
-                  $ref: '#/components/schemas/Contract'
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    workflow_id:
+                      type: integer
+                    document:
+                      type: object
+                      properties:
+                        file_id:
+                          type: integer
+                    
       responses:
         '200':
           description: '{{ t "operations.createContract.responses.200.description" }}'
@@ -744,7 +755,6 @@ paths:
                   properties:
                     name:
                       type: string
-                      description: 'Nome do grupo/espaço de trabalho'
 
       responses:
         '200':
@@ -785,28 +795,28 @@ components:
       content:
         application/json:
           schema:
-            $ref: 'Unauthorized'
+            $ref: '#/components/schemas/Error'
 
     Forbidden:
       description: 'Permissões insuficientes para o recurso especificado'
       content:
         application/json:
           schema:
-            $ref: 'Forbidden'
+            $ref: '#/components/schemas/Error'
 
     NotFound:
       description: 'Recurso não encontrado'
       content:
         application/json:
           schema:
-            $ref: 'Not found'
+            $ref: '#/components/schemas/Error'
 
     GenericError:
       description: 'Erro interno do servidor'
       content:
         application/json:
           schema:
-            $ref: 'Internal server error'
+            $ref: '#/components/schemas/Error'
 
   schemas:
     File:
