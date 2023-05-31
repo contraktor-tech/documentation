@@ -38,6 +38,10 @@ tags.Proof.description: |
   Cada prova é relacionada um contrato, e um contrato pode conter várias provas.
   No registro de cada prova também são armazenados de forma imutável uma série de
   documentos para comprovações e verificações.
+tags.Workflow.description: |
+  Os grupos/espaços de trabalho representam um grupo de informações dentro da organização
+  onde apenas usuários que fazem parte deste grupo podem realizar ações como
+  por exemplo: criar, editar e deletar contratos.
 
 operations.createFile.summary: Cria um arquivo (upload)
 operations.createFile.responses.200.description: O arquivo criado

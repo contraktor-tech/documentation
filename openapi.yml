@@ -3,10 +3,10 @@ info:
   version: 1.0.0
   title: '{{ t "info.title" }}'
   description: |
-    Utilizando a Contraktor API v1, é possível automatizar a criação
+    Utilizando a Contraktor API, é possível automatizar a criação
     de seus contratos e envio para assinatura.
 
-    Em [github.com/Contraktor-Legal-Tech/contraktor-api](https://github.com/Contraktor-Legal-Tech/contraktor-api/tree/master/examples),
+    Em [github.com/contraktor-tech/documentation](https://github.com/contraktor-tech/documentation/tree/master/examples),
     você pode encontrar exemplos em Node.js de como utilizar a API.
 
     ## Guia rápido
@@ -96,7 +96,7 @@ info:
 servers:
   - url: https://api-sandbox.contraktor.com.br/api
     description: '{{ t "servers.sandbox.description" }}'
-  - url: https://api.contraktor.com.br/api/v1
+  - url: https://api-v3.contraktor.com.br/api
     description: '{{ t "servers.production.description" }}'
 
 security:
@@ -111,6 +111,8 @@ tags:
     description: '{{ t "tags.Party.description" }}'
   - name: Proof
     description: '{{ t "tags.Proof.description" }}'
+  - name: Workflow
+    description: '{{ t "tags.Workflow.description" }}'
 
 paths:
   '/files':
@@ -688,6 +690,53 @@ paths:
         default:
           $ref: '#/components/responses/GenericError'
 
+  '/workflows':
+    post:
+      operationId: createWorkflow
+      summary: 'Cria um grupo/espaço de trabalho'
+      tags:
+        - Workflow
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                workflow:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: 'Nome do grupo/espaço de trabalho'
+
+      responses:
+        '200':
+          description: 'Retorno dos dados de um grupo/espaço de trabalho'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Workflow'
+    get:
+      operationId: listWorkflows
+      summary: 'Lista todos os grupos/espaços de trabalho de uma organização'
+      tags:
+        - Workflow
+      responses:
+        '200':
+          description: 'Lista de grupos/espaços de trabalho'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Workflow'
 components:
   securitySchemes:
     apiKey:
@@ -696,32 +745,32 @@ components:
 
   responses:
     Unauthorized:
-      description: '{{ t "components.response.Unauthorized.description" }}'
+      description: 'Autenticação é requirida para o recurso especificado'
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: 'Unauthorized'
 
     Forbidden:
-      description: '{{ t "components.response.Forbidden.description" }}'
+      description: 'Permissões insuficientes para o recurso especificado'
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: 'Forbidden'
 
     NotFound:
-      description: '{{ t "components.response.NotFound.description" }}'
+      description: 'Recurso não encontrado'
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: 'Not found'
 
     GenericError:
-      description: '{{ t "components.response.GenericError.description" }}'
+      description: 'Erro interno do servidor'
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: 'Internal server error'
 
   schemas:
     File:
@@ -847,6 +896,10 @@ components:
           type: string
           description: '{{ t "components.schemas.Contract.properties.updated_at" }}'
           example: '2019-03-12T19:20:11.350959'
+        workflow:
+          allOf:
+            - description: 'Referência ao grupo/espaço de trabalho que este contrato pertence'
+            - $ref: '#/components/schemas/Workflow'
 
     Sharing:
       required:
@@ -1214,6 +1267,31 @@ components:
         value:
           type: string
           description: '{{ t "components.schemas.CustomField.properties.value" }}'
+
+    Workflow:
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+          description: 'Identificador único do grupo/espaço de trabalho'
+          example: 1
+        name:
+          type: string
+          description: 'Nome do grupo/espaço de trabalho'
+          example: 'Jurídico'
+        is_default:
+          type: boolean
+          description: 'Identifica se o grupo/espaço de trabalho é o padrão da organização'
+          example: false
+        inserted_at:
+          type: string
+          description: 'Data de inserção do registro'
+          example: '2023-10-01T19:20:11.350947'
+        updated_at:
+          type: string
+          description: 'Data da última atualização do registro'
+          example: '2023-10-01T19:20:11.350947'
 
     Error:
       required:
