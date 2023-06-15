@@ -13,11 +13,11 @@ const contraktorAPI = axios.create({
 });
 
 /**
- * Exemplo de como criar um contrato dentro de um grupo/espaço de trabalho especifico.
+ * Exemplo de como criar um contrato dentro de um grupo especifico.
  */
 async function execute() {
   try {
-    console.log('1. Listando os grupos de trabalho disponíveis na organização..');
+    console.log('1. Listando os grupos disponíveis na organização..');
 
     const workflows = await contraktorAPI.get('/workflows')
       .then((res) => res.data.data)
@@ -26,13 +26,13 @@ async function execute() {
       });
 
     /**
-     * Neste exemplo vamos utilizar o grupo de trabalho cadastrado com nome "Comercial",
+     * Neste exemplo vamos utilizar o grupo cadastrado com nome "Comercial",
      * portanto vou armazenar o ID dele na variável workflow_id.
      */
 
     const workflow_id = await workflows.find((workflow) => workflow.name === 'Comercial').id;
 
-    console.log('2. Criando um contrato dentro do grupo de trabalho "Comercial" utilizando o modo de Modelos de Contratos..');
+    console.log('2. Criando um contrato dentro do grupo "Comercial" utilizando o modo de Modelos de Contratos..');
 
     const contract = await contraktorAPI.post('/contracts', {
       contract: {
@@ -47,7 +47,7 @@ async function execute() {
     })
       .then((res) => res.data.data);
 
-    console.log(`Contrato ID: ${contract.id} criado com sucesso no grupo de trabalho ${contract.workflow.id} - ${contract.workflow.name}! `)
+    console.log(`Contrato ID: ${contract.id} criado com sucesso no grupo ${contract.workflow.id} - ${contract.workflow.name}! `)
   } catch (error) {
     console.log('Ocorreu um erro', error);
   }
