@@ -110,7 +110,6 @@ async function execute() {
      * ou
      * 
      * Nos exemplos em JavaScript presente nesse repositório
-     * - examples/cancel-signature-request (Cancelamento de assinatura)
      * - examples/resend-signature-request (Reenvio de assinatura)
      */
   } catch (error) {

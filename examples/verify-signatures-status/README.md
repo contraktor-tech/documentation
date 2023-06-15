@@ -24,7 +24,6 @@ Proof Subject é cada participante do contrato, mas **diferente de um Proof ele 
 
 Ou, utilizando os exemplos em JavaScript presente nesse repositório:
 
-* examples/cancel-signature-request (Cancelamento de assinatura)
 * examples/resend-signature-request (Reenvio de assinatura)
 
 Na seção **Contract**, **Proof**,  e **ProofSubject** da [nossa documentação](https://developers.contraktor.com.br/) você irá encontrar os endpoints e schemas disponíveis.
