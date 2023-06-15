@@ -1,4 +1,4 @@
-# Criando de contrato dentro de um grupo específico.
+# Criar um contrato dentro de um grupo específico.
 
 Por padrão, contratos criados dentro da plataforma ou através da nossa API são criados dentro do grupo (workflow) Padrão.
 
