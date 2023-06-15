@@ -20,7 +20,7 @@ async function execute() {
     console.log('1. Buscando contrato pelo ID..');
 
     // ID do Contrato
-    const contractId = 2188455;
+    const contractId = 123456;
 
     /**
      * Você pode consultar o Schema de um Contrato através da nossa documentação
